@@ -8,7 +8,7 @@ import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "publishers")
-public class Publusher {
+public class Publisher {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
@@ -17,7 +17,7 @@ public class Publusher {
 
   private String address;
 
-  public Publusher(Long id, String name, String address) {
+  public Publisher(Long id, String name, String address) {
     this.id = id;
     this.name = name;
     this.address = address;
