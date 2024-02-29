@@ -20,7 +20,7 @@ public class PublisherService {
     return this.publisherRepository.save(publisher);
   }
 
-  public Optional<Publisher> updatePublisher(Long id, Publisher publisher) {
+  public static Optional<Publisher> updatePublisher(Long id, Publisher publisher) {
     Optional<Publisher> optionalPublisher = publisherRepository.findById(id);
     if(optionalPublisher.isPresent()){
       Publisher publisherFromDb = optionalPublisher.get();
