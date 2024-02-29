@@ -52,10 +52,6 @@ public class BookController {
     return ResponseEntity.ok(responseDTO);
   }
 
-  // Getter
-// Construtor
-// Método createBook
-// Método updateBook
 
   @DeleteMapping("/{bookId}")
   public ResponseEntity<ResponseDTO<Book>> removeBookById(@PathVariable Long bookId) {
@@ -70,12 +66,6 @@ public class BookController {
     ResponseDTO<Book> responseDTO = new ResponseDTO<>("Livro removido com sucesso!", null);
     return ResponseEntity.ok(responseDTO);
   }
-
-  // Getter
-// Construtor
-// Método createBook
-// Método updateBook
-// Método removeBookById
 
   @GetMapping("/{bookId}")
   public ResponseEntity<ResponseDTO<Book>> getBookById(@PathVariable Long bookId) {
