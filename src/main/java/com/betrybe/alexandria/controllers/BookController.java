@@ -69,18 +69,17 @@ public class BookController {
     return ResponseEntity.ok(responseDTO);
   }
 
-  @GetMapping("/{bookId}")
-  public ResponseEntity<ResponseDTO<Book>> getBookById(@PathVariable Long bookId) {
-    Optional<Book> optionalBook = bookService.getBookById(bookId);
-
+  @GetMapping("/{id}")
+  public ResponseEntity<ResponseDTO<Book>> getBookById(@PathVariable Long id) {
+    Optional<Book> optionalBook = bookService.getBookById(id);
     if (optionalBook.isEmpty()) {
       ResponseDTO<Book> responseDTO = new ResponseDTO<>(
-          String.format("Não foi encontrado o livro de ID %d", bookId), null);
+          String.format("Não foi possível encontrar o livro id %d", id), null);
       return ResponseEntity.status(HttpStatus.NOT_FOUND).body(responseDTO);
     }
-
-    ResponseDTO<Book> responseDTO = new ResponseDTO<>("Livro encontrado com sucesso!", optionalBook.get());
-    return ResponseEntity.ok(responseDTO);
+    ResponseDTO<Book> responseDTO = new ResponseDTO<>(String.format("Livro encontrado com sucesso!"),
+        optionalBook.get());
+    return ResponseEntity.status(HttpStatus.OK).body(responseDTO);
   }
 
   @GetMapping()
