@@ -102,8 +102,8 @@ public class BookController {
 
     BookDetail newBookDetail = bookDetailDTO.toBookDetail();
 
-    BookDetail savedBookDetail = bookService.insertBookDetail(newBookDetail);
-    ResponseDTO<BookDetail> responseDTO = new ResponseDTO<>("Detalhes do livro criados com sucesso!", savedBookDetail);
+    Optional<BookDetail> savedBookDetail = bookService.insertBookDetail(bookId, newBookDetail);
+    ResponseDTO<BookDetail> responseDTO = new ResponseDTO<>("Detalhes do livro criados com sucesso!", savedBookDetail.get());
     return ResponseEntity.status(HttpStatus.CREATED).body(responseDTO);
   }
 
@@ -162,9 +162,44 @@ public class BookController {
 
     List<BookDetail> allDetails = bookService.getAllBookDetails();
     return allDetails.stream()
-        .map((detail) -> new BookDetailDTO(detail.getId(), detail.getSumary(), detail.getPageCount(), detail.getYear(),
+        .map((detail) -> new BookDetailDTO(detail.getId(), detail.getSummary(), detail.getPageCount(), detail.getYear(),
             detail.getIsbn()))
         .collect(Collectors.toList());
+  }
+
+  @PutMapping("/{bookId}/publisher/{publisherId}")
+  public ResponseEntity<ResponseDTO<Book>> setPublisherFromBook(@PathVariable Long bookId, @PathVariable Long publisherId) {
+    Optional<Book> optionalBook = bookService.setPublisher(bookId, publisherId);
+
+    if(optionalBook.isEmpty()) {
+      ResponseDTO<Book> responseDTO = new ResponseDTO<>(
+          String.format("Não foi encontrado o livro de ID %d ou a editora de ID %d", bookId, publisherId), null);
+      return ResponseEntity.status(HttpStatus.NOT_FOUND).body(responseDTO);
+    }
+
+    ResponseDTO<Book> responseDTO = new ResponseDTO<>(
+        "Editora vinculada ao livro com sucesso!", optionalBook.get());
+    return ResponseEntity.ok(responseDTO);
+  }
+
+  @DeleteMapping("/{bookId}/publisher")
+  public ResponseEntity<ResponseDTO<Book>> removePublisherFromBook(@PathVariable Long bookId) {
+    Optional<Book> optionalBook = bookService.removePublisher(bookId);
+    if(optionalBook.isEmpty()){
+      ResponseDTO<Book> responseDTO = new ResponseDTO<>(
+          String.format("Não foi possível remover a editora do livro com id %d", bookId),
+          null
+      );
+
+      return ResponseEntity.status(HttpStatus.NOT_FOUND).body(responseDTO);
+    }
+
+    ResponseDTO<Book> responseDTO = new ResponseDTO<>(
+        String.format("Editora removida do livro de ID %d", bookId),
+        optionalBook.get()
+    );
+
+    return ResponseEntity.ok(responseDTO);
   }
 
 }
