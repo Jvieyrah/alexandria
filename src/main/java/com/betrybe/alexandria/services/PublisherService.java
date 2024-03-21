@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class PublisherService {
-  private PublisherRepository publisherRepository;
+  private static PublisherRepository publisherRepository;
 
   @Autowired
   public PublisherService(PublisherRepository publisherRepository){

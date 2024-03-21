@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -82,13 +83,18 @@ public class BookController {
     return ResponseEntity.status(HttpStatus.OK).body(responseDTO);
   }
 
-  @GetMapping()
-  public List<BookDTO> getAllBooks() {
-    List<Book> allBooks = bookService.getAllBooks();
-    return allBooks.stream()
-        .map((book) -> new BookDTO(book.getId(), book.getTitle(), book.getGenre()))
+  @GetMapping
+  public List<BookDTO> getAllBooks(
+      @RequestParam(required = false, defaultValue = "0") int pageNumber,
+      @RequestParam(required = false, defaultValue = "20") int pageSize
+  ) {
+    List<Book> paginatedBooks = bookService.findAll(pageNumber, pageSize);
+    return paginatedBooks.stream()
+        .map(book -> new BookDTO(book.getId(), book.getTitle(), book.getGenre()))
         .collect(Collectors.toList());
   }
+}
+
 
   @PostMapping("/{bookId}/detail" )
   public ResponseEntity<ResponseDTO<BookDetail>> createBookDetail(@PathVariable Long bookId, @RequestBody BookDetailDTO bookDetailDTO) {
