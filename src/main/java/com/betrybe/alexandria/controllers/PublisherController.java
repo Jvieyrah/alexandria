@@ -68,7 +68,7 @@ public class PublisherController {
   public List<PublisherDTO> getAllPublishers() {
     List<Publisher> allPublisher= publisherService.getAllPublishers();
     return allPublisher.stream()
-        .map((publisher) -> new PublisherDTO(publisher.getId(), publisher.getName(), publisher.getAddress()))
+        .map((publisher) -> new PublisherDTO(publisher.getId(), publisher.getName(), publisher.getAddress(), publisher.getBooks()))
         .collect(Collectors.toList());
   }
 

@@ -11,6 +11,9 @@ import com.betrybe.alexandria.models.repositories.PublisherRepository;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -31,6 +34,13 @@ public class BookService {
     this.bookDetailRepository = bookDetailRepository;
     this.publisherRepository = publisherRepository;
     this.authorRepository = authorRepository;
+  }
+
+  public List<Book> findAll(int pageNumber, int pageSize) {
+    Pageable pageable = PageRequest.of(pageNumber, pageSize);
+    Page<Book> page = bookRepository.findAll(pageable);
+
+    return page.toList();
   }
 
   public Book insertBook(Book book) {
