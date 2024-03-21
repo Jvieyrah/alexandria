@@ -92,7 +92,6 @@ public class BookController {
     return paginatedBooks.stream()
         .map(book -> new BookDTO(book.getId(), book.getTitle(), book.getGenre()))
         .collect(Collectors.toList());
-  }
 }
 
 
